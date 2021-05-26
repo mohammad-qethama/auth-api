@@ -58,8 +58,8 @@ describe('Auth tests',()=>{
         size:'medium'
        }
     //act
-    const responseFood = await request.post('/api/v1/food').send(food).set('Authorization', 'Bearer ' + tokens[user.username]);
-    const responseClothes = await request.post('/api/v1/clothes').send(shirt).set('Authorization', 'Bearer ' + tokens[user.username]);
+    const responseFood = await request.post('/api/v2/food').send(food).set('Authorization', 'Bearer ' + tokens[user.username]);
+    const responseClothes = await request.post('/api/v2/clothes').send(shirt).set('Authorization', 'Bearer ' + tokens[user.username]);
     //assert
 
     if ((user.role === 'admin') || (user.role === 'editor') ){
@@ -92,8 +92,8 @@ describe('Auth tests',()=>{
   
     it('should read the food/clothes list',async ()=>{
 
-    const responseFood = await request.get('/api/v1/food').set('Authorization', 'Bearer ' + tokens[user.username]);
-    const responseClothes = await request.get('/api/v1/clothes').set('Authorization', 'Bearer ' + tokens[user.username]);
+    const responseFood = await request.get('/api/v2/food').set('Authorization', 'Bearer ' + tokens[user.username]);
+    const responseClothes = await request.get('/api/v2/clothes').set('Authorization', 'Bearer ' + tokens[user.username]);
     
     
     expect(responseClothes.status).toEqual(200);
@@ -116,8 +116,8 @@ describe('Auth tests',()=>{
 
     it('should read the food/clothes item by id',async ()=>{
 
-      const responseFood = await request.get(`/api/v1/food/${idFood}`).set('Authorization', 'Bearer ' + tokens[user.username]);
-      const responseClothes = await request.get(`/api/v1/clothes/${idClothes}`).set('Authorization', 'Bearer ' + tokens[user.username]);
+      const responseFood = await request.get(`/api/v2/food/${idFood}`).set('Authorization', 'Bearer ' + tokens[user.username]);
+      const responseClothes = await request.get(`/api/v2/clothes/${idClothes}`).set('Authorization', 'Bearer ' + tokens[user.username]);
     
       expect(responseFood.status).toEqual(200);
       expect(responseClothes.status).toEqual(200);
@@ -151,8 +151,8 @@ describe('Auth tests',()=>{
         size:'large'
     }
     //act
-    const responseFood = await request.put(`/api/v1/food/${idFood}`).send(editFood).set('Authorization', 'Bearer ' + tokens[user.username]);
-    const responseClothes = await request.put(`/api/v1/clothes/${idClothes}`).send(editShirt).set('Authorization', 'Bearer ' + tokens[user.username]);
+    let responseFood = await request.put(`/api/v2/food/${idFood}`).send(editFood).set('Authorization', 'Bearer ' + tokens[user.username]);
+    let responseClothes = await request.put(`/api/v2/clothes/${idClothes}`).send(editShirt).set('Authorization', 'Bearer ' + tokens[user.username]);
                
     //asert
     if ((user.role === 'admin') || (user.role === 'editor') ){ 
@@ -171,32 +171,36 @@ describe('Auth tests',()=>{
         console.log(responseClothes.body.error);
 
        }
+      responseFood = await request.put(`/api/v2/food/${idFood}`).send(food).set('Authorization', 'Bearer ' + tokens[user.username]);
+      responseClothes = await request.put(`/api/v2/clothes/${idClothes}`).send(shirt).set('Authorization', 'Bearer ' + tokens[user.username]);
+                  
+       //asert
 
     });
 
-    // it('should delete the clothes/food item(s)',async()=>{
-    // console.log(user.username);
+    it('should delete the clothes/food item(s)',async()=>{
+    console.log(user.username);
 
-    // let responseFood  = await request.delete(`/api/v1/food/${idFood}`).set('Authorization', 'Bearer ' + tokens[user.username]) ;
-    // let responseClothes  = await request.delete(`/api/v1/clothes/${idClothes}`).set('Authorization', 'Bearer ' + tokens[user.username]) ;
+    let responseFood  = await request.delete(`/api/v2/food/${idFood}`).set('Authorization', 'Bearer ' + tokens[user.username]) ;
+    let responseClothes  = await request.delete(`/api/v2/clothes/${idClothes}`).set('Authorization', 'Bearer ' + tokens[user.username]) ;
 
-    // if ((user.role === 'admin') ){ 
-    // expect(responseFood.status).toEqual(200);
-    // expect(responseClothes.status).toEqual(200);
+    if ((user.role === 'admin') ){ 
+    expect(responseFood.status).toEqual(200);
+    expect(responseClothes.status).toEqual(200);
 
-    // responseFood = await request.get(`/api/v1/food/${idFood}`).set('Authorization', 'Bearer ' + tokens[user.username]);
-    // responseClothes = await request.get(`/api/v1/clothes/${idClothes}`).set('Authorization', 'Bearer ' + tokens[user.username]);
-    // expect(responseFood.body).toBeFalsy();
-    // expect(responseFood.clothes).toBeFalsy();}else{
-    //     console.log(user.username);
-    //     expect(responseClothes.status).toEqual(500);
-    //     console.log(responseClothes.body.error);
+    responseFood = await request.get(`/api/v2/food/`).set('Authorization', 'Bearer ' + tokens[user.username]);
+    responseClothes = await request.get(`/api/v2/clothes/`).set('Authorization', 'Bearer ' + tokens[user.username]);
+    expect(responseFood.body).toBeFalsy();
+    expect(responseFood.clothes).toBeFalsy();}else{
+        console.log(user.username);
+        expect(responseClothes.status).toEqual(500);
+        console.log(responseClothes.body.error);
 
-    //    }
+       }
 
 
 
-    // })
+    })
 
     it('should be notFound error',async ()=>{
     const res = await request.patch('/api/v2/food');
