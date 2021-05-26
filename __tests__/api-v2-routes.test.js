@@ -22,6 +22,19 @@ describe('Auth tests',()=>{
     role:'admin'
   }];
 
+
+  let food = {
+    name: 'angus prime',
+    calories:500,
+    type: 'PROTIEN'
+   };
+
+let shirt = {
+    name:'shirt',
+    color: 'black',
+    size:'medium'
+   };
+
   let idFood;
   let idClothes;
 
@@ -46,17 +59,7 @@ describe('Auth tests',()=>{
 
    it('should create a new food/clothes using post request', async () => {
     //arrange
-    let food = {
-        name: 'angus prime',
-        calories:500,
-        type: 'PROTIEN'
-    }
 
-    let shirt = {
-        name:'shirt',
-        color: 'black',
-        size:'medium'
-       }
     //act
     const responseFood = await request.post('/api/v2/food').send(food).set('Authorization', 'Bearer ' + tokens[user.username]);
     const responseClothes = await request.post('/api/v2/clothes').send(shirt).set('Authorization', 'Bearer ' + tokens[user.username]);
