@@ -33,10 +33,10 @@ let shirt = {
     name:'shirt',
     color: 'black',
     size:'medium'
-   };
+   }
 
-  let idFood=[];
-  let idClothes=[];
+  let idFood;
+  let idClothes;
 
   const tokens = {};
 
@@ -87,8 +87,8 @@ let shirt = {
 
 
 
-    idFood = push(responseFood.body._id);
-    idClothes = (responseClothes.body._id);
+    idFood = responseFood.body._id;
+    idClothes = responseClothes.body._id;
     // console.log({idFood});
     });
 
@@ -119,8 +119,8 @@ let shirt = {
 
     it('should read the food/clothes item by id',async ()=>{
 
-      const responseFood = await request.get(`/api/v2/food/${idFood[0]}`).set('Authorization', 'Bearer ' + tokens[user.username]);
-      const responseClothes = await request.get(`/api/v2/clothes/${idClothes[0]}`).set('Authorization', 'Bearer ' + tokens[user.username]);
+      const responseFood = await request.get(`/api/v2/food/${idFood}`).set('Authorization', 'Bearer ' + tokens[user.username]);
+      const responseClothes = await request.get(`/api/v2/clothes/${idClothes}`).set('Authorization', 'Bearer ' + tokens[user.username]);
     
       expect(responseFood.status).toEqual(200);
       expect(responseClothes.status).toEqual(200);
@@ -154,8 +154,8 @@ let shirt = {
         size:'large'
     }
     //act
-    let responseFood = await request.put(`/api/v2/food/${idFood[0]}`).send(editFood).set('Authorization', 'Bearer ' + tokens[user.username]);
-    let responseClothes = await request.put(`/api/v2/clothes/${idClothes[0]}`).send(editShirt).set('Authorization', 'Bearer ' + tokens[user.username]);
+    let responseFood = await request.put(`/api/v2/food/${idFood}`).send(editFood).set('Authorization', 'Bearer ' + tokens[user.username]);
+    let responseClothes = await request.put(`/api/v2/clothes/${idClothes}`).send(editShirt).set('Authorization', 'Bearer ' + tokens[user.username]);
                
     //asert
     if ((user.role === 'admin') || (user.role === 'editor') ){ 
@@ -174,8 +174,8 @@ let shirt = {
         console.log(responseClothes.body.error);
 
        }
-      responseFood = await request.put(`/api/v2/food/${idFood[0]}`).send(food).set('Authorization', 'Bearer ' + tokens[user.username]);
-      responseClothes = await request.put(`/api/v2/clothes/${idClothes[0]}`).send(shirt).set('Authorization', 'Bearer ' + tokens[user.username]);
+      responseFood = await request.put(`/api/v2/food/${idFood}`).send(food).set('Authorization', 'Bearer ' + tokens[user.username]);
+      responseClothes = await request.put(`/api/v2/clothes/${idClothes}`).send(shirt).set('Authorization', 'Bearer ' + tokens[user.username]);
                   
        //asert
 
@@ -184,17 +184,14 @@ let shirt = {
     it('should delete the clothes/food item(s)',async()=>{
     console.log(user.username);
 
-    let responseFood  = await request.delete(`/api/v2/food/${idFood[0]}`).set('Authorization', 'Bearer ' + tokens[user.username]) ;
-    let responseClothes  = await request.delete(`/api/v2/clothes/${idClothes[0]}`).set('Authorization', 'Bearer ' + tokens[user.username]) ;
+    let responseFood  = await request.delete(`/api/v2/food/${idFood}`).set('Authorization', 'Bearer ' + tokens[user.username]) ;
+    let responseClothes  = await request.delete(`/api/v2/clothes/${idClothes}`).set('Authorization', 'Bearer ' + tokens[user.username]) ;
 
     if ((user.role === 'admin') ){ 
     expect(responseFood.status).toEqual(200);
     expect(responseClothes.status).toEqual(200);
 
-    responseFood = await request.get(`/api/v2/food/`).set('Authorization', 'Bearer ' + tokens[user.username]);
-    responseClothes = await request.get(`/api/v2/clothes/`).set('Authorization', 'Bearer ' + tokens[user.username]);
-    expect(responseFood.body).toBeFalsy();
-    expect(responseFood.clothes).toBeFalsy();}else{
+     }else{
         console.log(user.username);
         expect(responseClothes.status).toEqual(500);
         console.log(responseClothes.body.error);
