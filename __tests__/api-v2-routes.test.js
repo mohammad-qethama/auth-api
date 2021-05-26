@@ -35,10 +35,12 @@ let shirt = {
     size:'medium'
    }
 
-  let idFood;
-  let idClothes;
+  
 
   const tokens = {};
+  
+  let idFood ;
+  let idClothes ;
 
 
   users.forEach(user => {
@@ -54,7 +56,6 @@ let shirt = {
       tokens[user.username]=response.body.token;
 
     
-
    });
 
    it('should create a new food/clothes using post request', async () => {
@@ -118,7 +119,8 @@ let shirt = {
     });
 
     it('should read the food/clothes item by id',async ()=>{
-
+     
+      if (idFood && idClothes  ){
       const responseFood = await request.get(`/api/v2/food/${idFood}`).set('Authorization', 'Bearer ' + tokens[user.username]);
       const responseClothes = await request.get(`/api/v2/clothes/${idClothes}`).set('Authorization', 'Bearer ' + tokens[user.username]);
     
@@ -131,7 +133,9 @@ let shirt = {
 
       expect(responseClothes.body.size).toEqual('medium');
       expect(responseClothes.body.color).toEqual('black');
-      expect(responseClothes.body.name).toEqual('shirt');
+      expect(responseClothes.body.name).toEqual('shirt');}else{
+        console.log({idFood});
+      }
 
 
 
